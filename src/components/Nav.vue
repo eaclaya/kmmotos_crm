@@ -89,6 +89,7 @@ export default {
       }
     }
     const showTaskDetail = async(item) => {
+      const API_URL = import.meta.env.VITE_API
       let tasks = JSON.parse(localStorage.getItem('tasks'))
       let task = null
       for(const _task of tasks){
@@ -102,7 +103,7 @@ export default {
         store.state.task = task  
         store.state.notifications = store.state.notifications.filter((notification) => item.id != notification.id)
         localStorage.setItem('notifications',JSON.stringify(store.state.notifications)) 
-        await axios.get('https://kmmotos.miposvirtual.com/apirest/tasks/notifications/update/' + item.id);
+        await axios.get(`${API_URL}/tasks/notifications/update/${item.id}`);
       }
       
     
@@ -128,9 +129,10 @@ export default {
     }
   },
   async created(){
+    const API_URL = import.meta.env.VITE_API
     const employee = JSON.parse(localStorage.getItem('employee'));
     console.log('created employee => ', employee)
-    let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/tasks/notifications/' + employee.id);
+    let response = await axios.get(`${API_URL}/tasks/notifications/${employee.id}`);
     localStorage.setItem('notifications', JSON.stringify(response.data));
     this.store.state.notifications = response.data
     if(employee.task_id){

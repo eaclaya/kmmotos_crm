@@ -54,13 +54,14 @@ export default {
       store.state.task = {}
     }
     const deleteBoard = async() => {
+      const API_URL = import.meta.env.VITE_API
       if(!board.value){
         return;
       }
       const data = {
         board_id: board.value.id
       }
-      let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/boards/delete', data)
+      let response = await axios.post(`${API_URL}/boards/delete`, data)
       store.state.boards = store.state.boards.filter((item) => item.id != board.value.id)
       router.push('/boards')
     }

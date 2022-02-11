@@ -53,6 +53,7 @@ export default {
     }
 
     const saveTaskComment = async() => {
+      const API_URL = import.meta.env.VITE_API
       const taskComment = {
         id: new Date().getTime(),
         task_id: task.value.id,
@@ -69,7 +70,7 @@ export default {
       taskComments.push(taskComment)
       localStorage.setItem('task_comments', JSON.stringify(taskComments))
       comments.value.unshift(taskComment)
-      let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/tasks/comment/save', taskComment);
+      let response = await axios.post(`${API_URL}/tasks/comment/save`, taskComment);
     }
 
     const getToday = () => {
@@ -86,9 +87,9 @@ export default {
   },
 
   async mounted(){
-    
+    const API_URL = import.meta.env.VITE_API
     if(this.task){
-      let taskComments = await axios.get('https://kmmotos.miposvirtual.com/apirest/tasks/comments/' + this.task.id);
+      let taskComments = await axios.get(`${API_URL}/tasks/comments/${this.task.id}`);
       taskComments = taskComments.data || []
       
       this.comments = taskComments.filter((item) => item.task_id == this.task.id)  

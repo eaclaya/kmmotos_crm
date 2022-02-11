@@ -35,13 +35,14 @@ import { useRouter, useRoute } from 'vue-router'
 
 export default {
   setup(){
+    const API_URL = import.meta.env.VITE_API
     const router = useRouter()
     const route = useRoute()
     const token = ref(route.params.token)
     const loading = ref(false)
   	const employeeValue = ref('');
   	const getEmployee = async() => {
-  		let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/employees/get/' + employeeValue.value);
+  		let response = await axios.get(`${API_URL}/employees/get/${employeeValue.value}`);
   		if(response.data && response.data.id){
   			localStorage.setItem('employee', JSON.stringify(response.data));
   			return router.push('/');	
@@ -61,8 +62,9 @@ export default {
   },
   async created(){
     if(this.token){
+      const API_URL = import.meta.env.VITE_API
       this.loading = true
-      let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/employees/token/' + this.token);  
+      let response = await axios.get(`${API_URL}/employees/token/` + this.token);  
       if(response.data && response.data.id){
         localStorage.setItem('employee', JSON.stringify(response.data));
         return this.router.push('/');  

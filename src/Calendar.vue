@@ -67,8 +67,9 @@ export default {
 
     const loadEvents = async() => {
       const employee = JSON.parse(localStorage.getItem('employee'));
+      const API_URL = import.meta.env.VITE_API
       if(employee){
-        let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/tasks/' + employee.id);
+        let response = await axios.get(`${API_URL}/tasks/employee.id`);
         for(const index in response.data){
           response.data[index].is_running = response.data[index].is_running ? true : false
           response.data[index].completed = response.data[index].completed ? true : false

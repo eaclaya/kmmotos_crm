@@ -130,7 +130,8 @@ export default {
     })
 
     const deleteBoard = async(board_id) => {
-      let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/boards/delete', {board_id: board_id});
+      const API_URL = import.meta.env.VITE_API
+      let response = await axios.post(`${API_URL}/boards/delete`, {board_id: board_id});
       store.state.show = false
       let boards = JSON.parse(localStorage.getItem('boards'))
       if(boards){
@@ -167,10 +168,11 @@ export default {
     }
 
     const searchEmployee = debounce(async() => {
+      const API_URL = import.meta.env.VITE_API
       if(!employeeValue.value){
         return employees.value = [];
       }
-      let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/employees/search/' + employeeValue.value);
+      let response = await axios.get(`${API_URL}/employees/search/${employeeValue.value}`);
       employees.value = response.data
     }, 500)
 
@@ -191,10 +193,11 @@ export default {
     }
 
     const searchClient = async() => {
+      const API_URL = import.meta.env.VITE_API
       if(!clientValue.value){
         return clients.value = [];
       }
-      let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/clients/search/' + clientValue.value);
+      let response = await axios.get(`${API_URL}/clients/search/${clientValue.value}`);
       clients.value = response.data
     }
 
@@ -226,6 +229,7 @@ export default {
     }
 
     const saveBoard = async() => {
+      const API_URL = import.meta.env.VITE_API
       const employee = JSON.parse(localStorage.getItem('employee'));
       if(name.value){
         if(store.state.board.id){
@@ -235,7 +239,7 @@ export default {
             employees: employeesList.value
           }
             
-          let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/boards/update', board);
+          let response = await axios.post(`${API_URL}/boards/update`, board);
           removeBoard(board)
           
         }else{
@@ -243,7 +247,7 @@ export default {
             name: name.value,
             employees: employeesList.value
           }
-          let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/boards/save', board);
+          let response = await axios.post(`${API_URL}/boards/save`, board);
           store.state.boards.unshift(response.data);
           employeesList.value = []
           name.value = []

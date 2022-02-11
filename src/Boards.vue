@@ -66,9 +66,10 @@ export default {
     }
   },
   async created(){
+    const API_URL = import.meta.env.VITE_API
     const employee = JSON.parse(localStorage.getItem('employee'));
     if(employee){
-      let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/boards/employees/' + employee.id);
+      let response = await axios.get(`${API_URL}/boards/employees/${employee.id}`);
       this.store.state.boards = response.data
       localStorage.setItem('boards', JSON.stringify(response.data));
     }

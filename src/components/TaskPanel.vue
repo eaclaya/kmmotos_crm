@@ -85,6 +85,7 @@ export default {
     const description = ref('')
 
     const selectEmployee =  async(value) => {
+      const API_URL = import.meta.env.VITE_API
       store.state.task.employee_name = `${value.first_name} ${value.last_name}`
       store.state.task.employee_id = value.id
       employees.value = []
@@ -92,7 +93,7 @@ export default {
         employee_id: value.id,
         task_id: store.state.task.id
       }
-      let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/tasks/employees/update', data)
+      let response = await axios.post(`${API_URL}/tasks/employees/update`, data)
 
     }
     const debounce = (fn, delay) => {
@@ -109,14 +110,16 @@ export default {
     }
 
     const searchEmployee = debounce(async() => {
+      const API_URL = import.meta.env.VITE_API
       if(!store.state.task.employee_name){
         return employees.value = [];
       }
-      let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/employees/search/' + store.state.task.employee_name);
+      let response = await axios.get(`${API_URL}/employees/search/${store.state.task.employee_name}`);
       employees.value = response.data
     }, 500)
 
      const saveTaskComment = async() => {
+      const API_URL = import.meta.env.VITE_API
       if(!description.value){
         return;
       }
@@ -137,7 +140,7 @@ export default {
       taskComments.push(taskComment)
       localStorage.setItem('task_comments', JSON.stringify(taskComments))
       comments.value.unshift(taskComment)
-      let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/tasks/comment/save', taskComment);
+      let response = await axios.post(`${API_URL}/tasks/comment/save`, taskComment);
       description.value = ''
     }
 
@@ -146,9 +149,10 @@ export default {
     }
 
     watchEffect(async() => {
+      const API_URL = import.meta.env.VITE_API
       description.value = ''
       if(store.state.task){
-        let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/tasks/comments/' + store.state.task.id)  
+        let response = await axios.get(`${API_URL}/tasks/comments/${store.state.task.id}`)  
         comments.value = response.data
       }
       

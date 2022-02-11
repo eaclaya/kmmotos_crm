@@ -142,10 +142,11 @@ export default {
     }
 
     const searchClient = debounce(async() => {
+      const API_URL = import.meta.env.VITE_API
         if(!clientValue.value){
           return clients.value = [];
         }
-        let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/clients/search/' + clientValue.value);
+        let response = await axios.get(`${API_URL}/clients/search/${clientValue.value}`);
         clients.value = response.data
       }, 500);
     
@@ -156,7 +157,8 @@ export default {
     } 
 
     const deleteTask = async(task_id) => {
-      let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/tasks/delete', {task_id: task_id});
+      const API_URL = import.meta.env.VITE_API
+      let response = await axios.post(`${API_URL}/tasks/delete`, {task_id: task_id});
       store.state.show = false
       let tasks = JSON.parse(localStorage.getItem('tasks'))
       if(tasks){
@@ -181,10 +183,11 @@ export default {
 
 
     const searchEmployee = debounce(async() => {
+      const API_URL = import.meta.env.VITE_API
       if(!employeeValue.value){
         return employees.value = [];
       }
-      let response = await axios.get('https://kmmotos.miposvirtual.com/apirest/employees/search/' + employeeValue.value);
+      let response = await axios.get(`${API_URL}/employees/search/${employeeValue.value}`);
       employees.value = response.data
     }, 500)
 
@@ -213,6 +216,7 @@ export default {
     }
 
     const saveTask = async() => {
+      const API_URL = import.meta.env.VITE_API
       const employee = JSON.parse(localStorage.getItem('employee'));
       if(selectedEmployee.value && description.value && employee){
         if(store.state.task.id){
@@ -229,7 +233,7 @@ export default {
             completed: store.state.task.completed
           }
           
-          let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/tasks/update', task);
+          let response = await axios.post(`${API_URL}/tasks/update`, task);
           removeTask(task)
           
         }else{
@@ -244,7 +248,7 @@ export default {
             is_running: true,
             recurring_type: recurring_type.value
           }
-          let response = await axios.post('https://kmmotos.miposvirtual.com/apirest/tasks/save', task);
+          let response = await axios.post(`${API_URL}/tasks/save`, task);
           store.state.board.tasks.unshift(response.data);
           store.state.tasks.unshift(response.data);
           localStorage.setItem('tasks', JSON.stringify(store.state.tasks));
